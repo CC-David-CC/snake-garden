@@ -43,3 +43,9 @@ is hidden or rolled up, or the browser blurs; Resume is explicit. Imported snake
 bodies are bounded to the board and checked for invalid cells. Local desktop and
 emulated-phone account checks cover save boundaries, focus, synchronization and
 account isolation. Physical phone and physical audio output remain unverified.
+
+A missing or invalid save used to restore a window now clears the failed
+reference and leaves a new paused garden. Local desktop and emulated-phone
+account tests cover an invalid save, playing, save/sync, close/reopen and paused
+refresh; a phone-sized missing-save test also passed. The original invalid file
+is untouched. Physical touch and authored Rive artwork remain unverified.

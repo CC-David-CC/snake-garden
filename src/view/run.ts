@@ -495,9 +495,10 @@ export async function startView(container: HTMLElement, signal: AbortSignal, hos
     }
   }
 
-  async function open(selected?: string): Promise<void> {
+  async function open(selected?: string, initialLoad = false): Promise<void> {
     if (!valid() || busy) return;
     busy = true;
+    let opened = false;
     session.pause();
     refresh();
     try {
@@ -535,9 +536,15 @@ export async function startView(container: HTMLElement, signal: AbortSignal, hos
       lastSummary = '';
       refresh();
       announce('Garden loaded and paused. Press Resume to play.');
+      opened = true;
     } catch (error) {
       announce('Could not open garden: ' + (error instanceof Error ? error.message : 'unknown error'));
     } finally {
+      if (initialLoad && !opened && valid() && host.w && host.w.launchContext?.path === selected) {
+        delete host.w.launchContext;
+        host.w.title = 'Snake Garden';
+        path.value = '/Snake Garden.game.json';
+      }
       busy = false;
     }
   }
@@ -632,7 +639,8 @@ export async function startView(container: HTMLElement, signal: AbortSignal, hos
 
   if (host.w?.launchContext?.storage === 'mirror' && host.w.launchContext.owner === owner) {
     path.value = host.w.launchContext.path;
-    queueMicrotask(() => void open(host.w!.launchContext!.path));
+    const initialPath = host.w.launchContext.path;
+    queueMicrotask(() => void open(initialPath, true));
   }
 
   return {
