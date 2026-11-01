@@ -1,0 +1,110 @@
+{
+  "category": "01-phaser-arcade",
+  "id": "snake-garden",
+  "title": "Snake Garden",
+  "genre": "Grid arcade",
+  "pitch": "A bright garden snake game where small challenges teach routing before an endless score chase.",
+  "capabilities": [
+    "Fixed grid tick with smooth visual interpolation",
+    "Seeded level variation",
+    "Input buffering and responsive sound cues"
+  ],
+  "rules": [
+    "One cell per logical move; at most one queued turn per tick; direct reversal is invalid.",
+    "Food spawns only in empty cells. Collision with the tail cell is allowed only when the tail moves away on that same non-growth tick.",
+    "Campaign goals are collect-count challenges; a full board is victory, not an infinite food-spawn loop."
+  ],
+  "content": "Six compact gardens, Classic endless and three fixed movement speeds.",
+  "state": [
+    "ordered snake cells",
+    "direction and queued legal turn",
+    "food cell",
+    "obstacle map id",
+    "score and growth count",
+    "RNG and move tick remainder"
+  ],
+  "actions": [
+    {
+      "command": "turn",
+      "desktop": "Arrows / WASD",
+      "phone": "D-pad or optional swipe; same command queue",
+      "xr": "Not applicable; plays as a flat browser app."
+    },
+    {
+      "command": "restart",
+      "desktop": "R after result",
+      "phone": "Restart button after result",
+      "xr": "Not applicable; plays as a flat browser app."
+    }
+  ],
+  "rive": {
+    "asset": "garden-guide.riv",
+    "role": "Animated seedling guide in title/results, with non-blocking score feedback.",
+    "properties": {
+      "progress": "number 0..1",
+      "speed": "integer 1..3"
+    },
+    "events": [
+      "eat",
+      "win",
+      "fail"
+    ],
+    "states": [
+      "idle",
+      "cheer",
+      "wilt",
+      "bloom"
+    ],
+    "artboard": "Main",
+    "stateMachine": "Presentation",
+    "assetStatus": "to_author"
+  },
+  "polish": [
+    "Soft corners and readable head direction",
+    "Optional swipe is supplemental, not the only phone control",
+    "No frame-rate-dependent speed"
+  ],
+  "tests": [
+    "Tail-cell entry and growth are tested separately.",
+    "Two fast turns cannot reverse within one tick.",
+    "Full board terminates cleanly.",
+    "Food never appears in a wall.",
+    "RNG and input buffer round-trip in a save.",
+    "Resize cannot alter board dimensions or snake speed."
+  ],
+  "loop": [
+    "accept one legal queued turn",
+    "compute next head and whether this move grows",
+    "evaluate collision with the correct vacating-tail rule",
+    "advance snake and generate food from empty-cell list",
+    "interpolate drawing only; keep rules grid-based"
+  ],
+  "save": "Exact logical snapshot including pending turn and move remainder.",
+  "wave": 2,
+  "specVersion": 1,
+  "status": "planned",
+  "implementation": "not_started",
+  "runtimeTests": "not_run",
+  "engine": "Phaser",
+  "singlePlayer": true,
+  "phoneRequired": true,
+  "mountContract": {
+    "export": "mount",
+    "synchronous": true,
+    "returns": [
+      "element",
+      "dispose"
+    ],
+    "productionEntry": "index.mjs",
+    "suppliedEntry": "index.pseudo.mjs"
+  },
+  "xrRequired": false,
+  "riveRequired": true,
+  "riveAssetIncluded": false,
+  "documentKind": "Exact logical snapshot including pending turn and move remainder.",
+  "sources": [
+    "S01",
+    "S02",
+    "S03"
+  ]
+}

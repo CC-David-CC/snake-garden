@@ -1,0 +1,47 @@
+HIGH-LEVEL GAMEPLAY PSEUDOCODE — Snake Garden
+Status: design only. Helpers and engine APIs must be implemented/qualified.
+
+INITIALIZE
+  construct app-owned rules/content state from a validated fresh seed or document
+  allocate only the selected engine's model/world; do not start a second preview model
+  load original assets and validate Rive names/types
+  install commands from CONTROLS.md; render a title and playable preview
+
+WHEN PLAY / RESUME
+  clear stale held input and timing debt
+  enter the active game phase; unlock audio only through a user gesture
+
+PER AUTHORITATIVE SIMULATION / RULE STEP
+  1. accept one legal queued turn
+  2. compute next head and whether this move grows
+  3. evaluate collision with the correct vacating-tail rule
+  4. advance snake and generate food from empty-cell list
+  5. interpolate drawing only; keep rules grid-based
+
+PER PRESENTATION FRAME
+  read current committed model/world; interpolate views only where appropriate
+  derive Rive properties/triggers from committed state, then advance/draw once
+  upload dirty artboard textures only; render scene without stepping physics twice
+  leave menus responsive while paused without advancing game score or simulation
+
+SAVE / LOAD
+  Exact logical snapshot including pending turn and move remainder.
+  validate document off to the side; commit replacement only if complete and valid
+  cancel old input/jobs/callbacks; return to paused current game
+
+RESIZE / SUSPEND
+  resize from the app container; clear timing debt on suspend and resume explicitly
+  do not change gameplay geometry/rules merely because display pixels changed
+
+DISPOSE
+  reject future commands and late results; stop clocks/input/audio immediately
+  release per-instance engine, Rive artboards, textures, observers and jobs
+  never destroy another app or a shared desktop service
+
+GAME-SPECIFIC EDGE CASES
+- Tail-cell entry and growth are tested separately.
+- Two fast turns cannot reverse within one tick.
+- Full board terminates cleanly.
+- Food never appears in a wall.
+- RNG and input buffer round-trip in a save.
+- Resize cannot alter board dimensions or snake speed.
