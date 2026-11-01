@@ -1,47 +1,45 @@
-# Snake Garden
+# Snake Garden — desktop integration
 
-**Grid arcade · Phaser · single-player · phone required · flat-screen app**
+Snake Garden is a Phaser 4.2.1 grid game with six campaign gardens, classic
+endless play and three fixed logical speeds. The rules model uses one queued
+turn per movement tick, seeded food placement, rock collision and the specified
+tail-vacation rule. A full board or campaign growth goal ends as a win.
 
-> Planned design, not implemented or browser-tested. `index.pseudo.mjs` is an explanatory entry point, not a playable game.
+The desktop app exposes a synchronous `mount(host)` and idempotently disposes
+only its own Phaser engine, listeners, resize observer, audio context and file
+subscription. Desktop keyboard controls and phone-sized direction buttons are
+both available; swiping the board is supplemental.
 
-## Experience
+Save and Open use the signed-in desktop's `My files` context. Files retain an
+expected version, show changed/conflicting-copy warnings, store the full logical
+snapshot including queued turn and tick remainder, and reopen paused.
 
-A bright garden snake game where small challenges teach routing before an endless score chase.
+## Current limitation
 
-## What this demonstrates
+No authored `garden-guide.riv` is supplied. The app shows a clearly labelled
+procedural seedling guide and does **not** claim the Rive acceptance gate is
+complete. Final artwork, physical-phone testing and the full per-game
+acceptance matrix remain open.
 
-- Fixed grid tick with smooth visual interpolation
-- Seeded level variation
-- Input buffering and responsive sound cues
+## Verification
 
-## Rules and complete loop
+From the desktop worktree:
 
-- One cell per logical move; at most one queued turn per tick; direct reversal is invalid.
-- Food spawns only in empty cells. Collision with the tail cell is allowed only when the tail moves away on that same non-growth tick.
-- Campaign goals are collect-count challenges; a full board is victory, not an infinite food-spawn loop.
+```sh
+npm run typecheck --prefix apps/system/snake-garden
+npm test --prefix apps/system/snake-garden
+node tests/snake-garden-browser.test.mjs
+CODI_PHONE=1 node tests/snake-garden-browser.test.mjs
+node tests/snake-garden-account.test.mjs
+```
 
-## Bounded polished release
+The browser fixture is memory-backed. The account test must point only at an
+isolated loopback account server.
 
-Six compact gardens, Classic endless and three fixed movement speeds.
-
-- Soft corners and readable head direction
-- Optional swipe is supplemental, not the only phone control
-- No frame-rate-dependent speed
-
-No multiplayer, accounts, server simulation or generic editor is required. Start, rules/help, play/activity, pause, outcome/goal feedback and retry must all be complete. Settings include volume/mute, reduced motion, contrast and game-specific options where meaningful. State changes occur in the game model; animations illustrate them.
-
-## Rive inside this app
-
-Animated seedling guide in title/results, with non-blocking score feedback. The requested asset is `garden-guide.riv`; it is **not included**. See [RIVE.md](RIVE.md) for the authoring/integration contract. A placeholder or unrelated animated logo does not satisfy this requirement.
-
-## Save behavior
-
-Exact logical snapshot including pending turn and move remainder. See [SAVE.md](SAVE.md). Loading starts paused; resume is explicit. Restart and load cancel stale callbacks and any owned AI work.
-
-## Build sequence
-
-Implement the rule loop in [gameplay.pseudo.txt](gameplay.pseudo.txt); bind the exact app lifecycle from [index.pseudo.mjs](index.pseudo.mjs); complete [CONTROLS.md](CONTROLS.md); author/integrate [RIVE.md](RIVE.md); then satisfy [ACCEPTANCE.md](ACCEPTANCE.md). Do not add XR or a 3D engine solely to widen the technology list.
-
-Target wave: **2**. Integrator first reads [AGENTS.md](../../AGENTS.md); do not guess host APIs from symbolic helper names.
-
-Use original/licensed artwork and audio. Keep the scope small enough to polish; expand content only after the release gates pass.
+Resuming or queuing a turn after a save marks the logical state unsaved. Saving
+captures a paused snapshot, holds game controls at that boundary, and warns if
+closed during the save. The app also pauses when its desktop window loses focus,
+is hidden or rolled up, or the browser blurs; Resume is explicit. Imported snake
+bodies are bounded to the board and checked for invalid cells. Local desktop and
+emulated-phone account checks cover save boundaries, focus, synchronization and
+account isolation. Physical phone and physical audio output remain unverified.
