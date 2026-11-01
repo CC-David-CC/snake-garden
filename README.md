@@ -26,8 +26,8 @@ acceptance matrix remain open.
 From the desktop worktree:
 
 ```sh
-npm run typecheck --prefix apps/system/snake-garden
-npm test --prefix apps/system/snake-garden
+npm run typecheck --prefix apps/games/01-phaser-arcade/snake-garden
+npm test --prefix apps/games/01-phaser-arcade/snake-garden
 node tests/snake-garden-browser.test.mjs
 CODI_PHONE=1 node tests/snake-garden-browser.test.mjs
 node tests/snake-garden-account.test.mjs
