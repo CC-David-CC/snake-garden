@@ -49,3 +49,7 @@ reference and leaves a new paused garden. Local desktop and emulated-phone
 account tests cover an invalid save, playing, save/sync, close/reopen and paused
 refresh; a phone-sized missing-save test also passed. The original invalid file
 is untouched. Physical touch and authored Rive artwork remain unverified.
+
+## Design requirements
+
+The original [design brief, controls, save rules, artwork and acceptance plans](design/README.md) are retained as reference. They describe targets; the implementation and qualification status above takes precedence.
