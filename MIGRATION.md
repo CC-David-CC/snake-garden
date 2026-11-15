@@ -9,3 +9,5 @@ This commit adds only generated-output exclusions and this provenance note. It c
 Existing configured checks passed in an isolated copy with the original sibling layout. Independent extraction checks are recorded privately. The old mixed Snake/Owl test imports Owl private source; preserve that baseline and separate the exact cases into their owning component suites in a subsequent commit.
 
 Dependency locks and tracked artwork/license notices remain authoritative inputs. Third-party dependencies keep their own licenses. Generated artifacts must be built and verified independently; do not copy a production bundle or user documents into this repository.
+
+The mixed original Snake/Owl import-safety suite was split into the owning app repositories after extraction. The three original case bodies and assertions are unchanged; one remains in Snake, two now run in Owl. Owl gains an explicit pinned test runner. No application/runtime behavior changed.
